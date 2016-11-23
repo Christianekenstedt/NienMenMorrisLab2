@@ -17,6 +17,8 @@
 		AAF570FF1DE63F3600EB7D6A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAF570FD1DE63F3600EB7D6A /* LaunchScreen.storyboard */; };
 		AAF5710A1DE63F3700EB7D6A /* Laboration2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF571091DE63F3700EB7D6A /* Laboration2Tests.swift */; };
 		AAF571151DE63F3700EB7D6A /* Laboration2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF571141DE63F3700EB7D6A /* Laboration2UITests.swift */; };
+		AAF571231DE6408200EB7D6A /* MorrisGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF571221DE6408200EB7D6A /* MorrisGameScene.swift */; };
+		AAF571251DE6423100EB7D6A /* NineMenMorrisRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF571241DE6423100EB7D6A /* NineMenMorrisRules.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		AAF571101DE63F3700EB7D6A /* Laboration2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Laboration2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF571141DE63F3700EB7D6A /* Laboration2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laboration2UITests.swift; sourceTree = "<group>"; };
 		AAF571161DE63F3700EB7D6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAF571221DE6408200EB7D6A /* MorrisGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MorrisGameScene.swift; sourceTree = "<group>"; };
+		AAF571241DE6423100EB7D6A /* NineMenMorrisRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NineMenMorrisRules.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,8 @@
 				AAF570FB1DE63F3600EB7D6A /* Assets.xcassets */,
 				AAF570FD1DE63F3600EB7D6A /* LaunchScreen.storyboard */,
 				AAF571001DE63F3600EB7D6A /* Info.plist */,
+				AAF571221DE6408200EB7D6A /* MorrisGameScene.swift */,
+				AAF571241DE6423100EB7D6A /* NineMenMorrisRules.swift */,
 			);
 			path = Laboration2;
 			sourceTree = "<group>";
@@ -273,6 +279,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAF571251DE6423100EB7D6A /* NineMenMorrisRules.swift in Sources */,
+				AAF571231DE6408200EB7D6A /* MorrisGameScene.swift in Sources */,
 				AAF570F51DE63F3600EB7D6A /* GameScene.swift in Sources */,
 				AAF570F71DE63F3600EB7D6A /* GameViewController.swift in Sources */,
 				AAF570EF1DE63F3600EB7D6A /* AppDelegate.swift in Sources */,
