@@ -21,7 +21,7 @@
  *
  */
 
-//  Converted to Swift 3 bt Christian Ekenstedt
+//  Converted to Swift 3 by Christian Ekenstedt
 //
 
 import Foundation
@@ -32,17 +32,30 @@ class NineMenMorrisRules {
     private var redmarker : Int
     private var turn : Int
     
-    let BLUE_MOVES = 1
-    let RED_MOVES = 2
-    let EMPTY_SPACE = 0
-    let BLUE_MARKER = 4
-    let RED_MARKER = 5
+    private let BLUE_MOVES = 1
+    private let RED_MOVES = 2
+    private let EMPTY_SPACE = 0
+    private let BLUE_MARKER = 4
+    private let RED_MARKER = 5
     
     init() {
         gameplan = Array<Int>(repeating: 0, count: 25)
         bluemarker = 9
         redmarker = 9
         turn = RED_MOVES
+    }
+    func whosTurn() -> String {
+        var str = "unkown"
+        if turn == BLUE_MOVES {
+            str = "Blue"
+        }else if turn == RED_MOVES {
+            str = "Red"
+        }
+        return str
+    }
+    
+    func whosTurnAsInt() -> Int{
+        return turn
     }
     
     /*
@@ -54,6 +67,7 @@ class NineMenMorrisRules {
                 if redmarker >= 0 {
                     if gameplan[to] == EMPTY_SPACE {
                         gameplan[to] = RED_MARKER
+                        gameplan[from] = EMPTY_SPACE // ???????????????
                         redmarker = redmarker - 1
                         turn = BLUE_MOVES
                         return true
@@ -63,6 +77,7 @@ class NineMenMorrisRules {
                     let valid = isValidMove(to: to,from: from)
                     if valid {
                         gameplan[0] = RED_MARKER
+                        gameplan[from] = EMPTY_SPACE // ???????????????
                         turn = BLUE_MOVES
                         return true
                     }else{
@@ -75,6 +90,7 @@ class NineMenMorrisRules {
                 if bluemarker >= 0 {
                     if gameplan[to] == EMPTY_SPACE{
                         gameplan[to] = BLUE_MARKER
+                        gameplan[from] = EMPTY_SPACE // ???????????????
                         bluemarker = bluemarker - 1
                         turn = RED_MOVES
                         return true
@@ -84,6 +100,7 @@ class NineMenMorrisRules {
                     let valid = isValidMove(to: to, from: from)
                     if valid {
                         gameplan[to] = BLUE_MARKER
+                        gameplan[from] = EMPTY_SPACE // ???????????????
                         turn = RED_MOVES
                         return true
                     }else{
@@ -103,7 +120,7 @@ class NineMenMorrisRules {
      */
     func remove(to: Int) -> Bool{
         if ((to == 1 || to == 4 || to == 7) && gameplan[1] == gameplan[4]
-            && gameplan[4] == gameplan[7]) {
+            && gameplan[4] == gameplan[7] && gameplan[1] != 0) {
             return true
         } else if ((to == 2 || to == 5 || to == 8)
             && gameplan[2] == gameplan[5] && gameplan[5] == gameplan[8]) {
@@ -161,6 +178,7 @@ class NineMenMorrisRules {
     func remove(from: Int, color: Int) -> Bool{
         if gameplan[from] == color{
             gameplan[from] = EMPTY_SPACE
+            // ta bort markören?
             return true
         }else{
             return false
@@ -195,6 +213,7 @@ class NineMenMorrisRules {
     
     /**
      * Check whether this is a legal move.
+     * Ändrad lagt till  from == 0 på varje, vet ej om rätt! 
      */
     func isValidMove(to: Int, from: Int) -> Bool {
         if gameplan[to] != EMPTY_SPACE{
@@ -203,53 +222,53 @@ class NineMenMorrisRules {
         
         switch (to) {
         case 1:
-            return (from == 4 || from == 22);
+            return (from == 4 || from == 22 || from == 0);
         case 2:
-            return (from == 5 || from == 23);
+            return (from == 5 || from == 23 || from == 0);
         case 3:
-            return (from == 6 || from == 24);
+            return (from == 6 || from == 24 || from == 0);
         case 4:
-            return (from == 1 || from == 7 || from == 5);
+            return (from == 1 || from == 7 || from == 5 || from == 0);
         case 5:
-            return (from == 4 || from == 6 || from == 2 || from == 8);
+            return (from == 4 || from == 6 || from == 2 || from == 8 || from == 0);
         case 6:
-            return (from == 3 || from == 5 || from == 9);
+            return (from == 3 || from == 5 || from == 9 || from == 0);
         case 7:
-            return (from == 4 || from == 10);
+            return (from == 4 || from == 10 || from == 0);
         case 8:
-            return (from == 5 || from == 11);
+            return (from == 5 || from == 11 || from == 0);
         case 9:
-            return (from == 6 || from == 12);
+            return (from == 6 || from == 12 || from == 0);
         case 10:
-            return (from == 11 || from == 7 || from == 13);
+            return (from == 11 || from == 7 || from == 13 || from == 0);
         case 11:
-            return (from == 10 || from == 12 || from == 8 || from == 14);
+            return (from == 10 || from == 12 || from == 8 || from == 14 || from == 0);
         case 12:
-            return (from == 11 || from == 15 || from == 9);
+            return (from == 11 || from == 15 || from == 9 || from == 0);
         case 13:
-            return (from == 16 || from == 10);
+            return (from == 16 || from == 10 || from == 0);
         case 14:
-            return (from == 11 || from == 17);
+            return (from == 11 || from == 17 || from == 0);
         case 15:
-            return (from == 12 || from == 18);
+            return (from == 12 || from == 18 || from == 0);
         case 16:
-            return (from == 13 || from == 17 || from == 19);
+            return (from == 13 || from == 17 || from == 19 || from == 0);
         case 17:
-            return (from == 14 || from == 16 || from == 20 || from == 18);
+            return (from == 14 || from == 16 || from == 20 || from == 18 || from == 0);
         case 18:
-            return (from == 17 || from == 15 || from == 21);
+            return (from == 17 || from == 15 || from == 21 || from == 0);
         case 19:
-            return (from == 16 || from == 22);
+            return (from == 16 || from == 22 || from == 0);
         case 20:
-            return (from == 17 || from == 23);
+            return (from == 17 || from == 23 || from == 0);
         case 21:
-            return (from == 18 || from == 24);
+            return (from == 18 || from == 24 || from == 0);
         case 22:
-            return (from == 1 || from == 19 || from == 23);
+            return (from == 1 || from == 19 || from == 23 || from == 0);
         case 23:
-            return (from == 22 || from == 2 || from == 20 || from == 24);
+            return (from == 22 || from == 2 || from == 20 || from == 24 || from == 0);
         case 24:
-            return (from == 3 || from == 21 || from == 23);
+            return (from == 3 || from == 21 || from == 23 || from == 0);
         default:
             return false
         }

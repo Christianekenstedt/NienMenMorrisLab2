@@ -9,81 +9,217 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    private var teamBlue : [SKNode] = [SKNode]()
+    private var teamRed : [SKNode] = [SKNode]()
+    private var boardPositions: [SKNode] = [SKNode]()
+    private var playerMarkTouched : SKNode? = nil
+    private var playerMarkOrginalPosition : CGPoint? = nil
+    private var playerMarkFrom : Int = 0
+    private var hasMill : Bool = false
+    private var opponentMarkToRemove : SKNode? = nil
+    private var opponentMarkPosToRemove : Int = 0
+    private var game : NineMenMorrisRules? = nil
+    
     
     override func didMove(to view: SKView) {
+        self.backgroundColor = UIColor.white
+        physicsWorld.contactDelegate = self
+        initBoardPositions()
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        startGame()
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        let touch = touches.first
+        let touchLocation = touch!.location(in: self)
+        
+        if !hasMill {
+            if game?.whosTurnAsInt() == 1 {
+                for pm in teamBlue{
+                    if pm.contains(touchLocation) {
+                        playerMarkTouched = pm
+                        playerMarkOrginalPosition = pm.position
+                        playerMarkFrom = getPlayerMarkPositionOnBoard()
+                    }
+                }
+            }else if game?.whosTurnAsInt() == 2 {
+                for pm in teamRed{
+                    if pm.contains(touchLocation) {
+                        playerMarkTouched = pm
+                        playerMarkOrginalPosition = pm.position
+                        playerMarkFrom = getPlayerMarkPositionOnBoard()
+                    }
+                }
+            }
+
+        }else{ // Måste fixa så man kan deleta!!!
+            if game?.whosTurnAsInt() == 2 {
+                for pm in teamBlue{
+                    if pm.contains(touchLocation) {
+                        opponentMarkToRemove = pm
+                        opponentMarkPosToRemove = getPlayerMarkPositionOnBoard()
+                    }
+                }
+            }else if game?.whosTurnAsInt() == 1 {
+                for pm in teamRed{
+                    if pm.contains(touchLocation) {
+                        playerMarkTouched = pm
+                        opponentMarkPosToRemove = getPlayerMarkPositionOnBoard()
+                    }
+                }
+            }
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        if playerMarkTouched != nil {
+            let touch = touches.first
+            let touchLocation = touch!.location(in: self)
+            playerMarkTouched?.position = touchLocation
+        }
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        if hasMill {
+            
+            if (game?.remove(from: opponentMarkPosToRemove, color: (game?.whosTurnAsInt())!))!{
+               opponentMarkToRemove?.removeFromParent()
+            }
+            
+            hasMill = false
+            playerMarkTouched = nil
+            return
+        }
+        checkWhereMarkIsPlaced(dropLocation: (touches.first?.location(in: self))!)
+        playerMarkTouched = nil // Kanske sätta nil på annan plats
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
+    
+    func setPlayerMark(location : CGPoint){
+        playerMarkTouched?.position = location
+    }
+    
+    /*
+     * Kanske bättre namn, typ logic eller run
+     */
+    func checkWhereMarkIsPlaced(dropLocation : CGPoint) {
+        // Kolla var markör är placerad, behöver vi kollisionsdetektering ?? den funkar iaf
+        if playerMarkTouched == nil {
+            return
+        }
+        let resetPos = playerMarkOrginalPosition
+        
+        for bp in boardPositions{
+            if bp.intersects(playerMarkTouched!)  { // intersects(playerMarkTouched!)
+                
+                let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
+                
+                if (game?.win(color: (game?.whosTurnAsInt())!))! {
+                    print("Player \(game?.whosTurn()) wins!")
+                }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
+                    if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
+                        print("VALID MOVE!")
+                        print("Move from e\(playerMarkFrom) to e\(pos!)")
+                        if (game?.remove(to: pos!))! {
+                            print("Du har mill, välj en av motståndarnas pjäs att ta bort!")
+                            hasMill = true
+                        }
+                    }
+                }else{
+                    print("INVALID MOVE!")
+                    break // Fattar inte varför det inte går att ta setPlayerMark(resetPos!) ??????
+                }
+                
+                setPlayerMark(location: bp.position)
+                return
+            }
+        }
+        setPlayerMark(location: resetPos!)
+
+    }
+    
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        var fBody: SKPhysicsBody
+        var sBody: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            fBody = contact.bodyA
+            sBody = contact.bodyB
+        } else {
+            fBody = contact.bodyB
+            sBody = contact.bodyA
+        }
+        
+        if fBody.categoryBitMask == playerMarkTouched?.physicsBody?.categoryBitMask && sBody.categoryBitMask == boardPositions[0].physicsBody?.categoryBitMask {
+            if (playerMarkTouched?.name?.contains("rc"))!{
+                print("\(playerMarkTouched!.name) nuddar \(sBody.node!.name)")
+            }else if (playerMarkTouched?.name?.contains("bc"))!{
+                print("\(playerMarkTouched!.name) nuddar \(sBody.node!.name)")
+            }
+            
+        }
+    }
+    
+    func getPlayerMarkPositionOnBoard() -> Int{
+        
+        for bp in boardPositions{
+            if bp.intersects(playerMarkTouched!) {
+                return Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))!
+            }
+        }
+        return 0
+    }
+    
+    func startGame(){
+        game = NineMenMorrisRules()
+        alertTurn()
+    }
+    
+    func restartGame() {
+        game = NineMenMorrisRules()
+    }
+    
+    func alertTurn(){
+        let msg = "\(game!.whosTurn())'s turn!"
+        NotificationCenter.default.post(name: Notification.Name(rawValue: notificationIdentifier), object: msg)
+    }
+    
+    func initBoardPositions(){
+        for child in children{
+            if child.name != nil {
+                if child.name!.contains("e"){
+                    boardPositions.append(child)
+                }else if child.name!.contains("bc"){
+                    teamBlue.append(child)
+                }else if child.name!.contains("rc"){
+                    teamRed.append(child)
+                }
+                
+            }
+        }
+    }
+    
 }

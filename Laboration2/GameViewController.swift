@@ -10,10 +10,15 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController {
+var notificationIdentifier = "alert"
 
+class GameViewController: UIViewController {
+    var msg : String? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showWhosTurn), name: NSNotification.Name(rawValue: notificationIdentifier), object: nil)
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
@@ -34,6 +39,13 @@ class GameViewController: UIViewController {
             view.showsFPS = true
             view.showsNodeCount = true
         }
+    }
+    
+    func showWhosTurn(notification: NSNotification){
+        let msg = notification.object as? String
+        let alert = UIAlertController(title: "Next player...", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Hand over device and press me", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
     override var shouldAutorotate: Bool {
