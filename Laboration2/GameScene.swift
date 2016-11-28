@@ -83,6 +83,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        
+        if playerMarkFrom > 0 && (game?.checkMarksInHand())! > 0 {
+            //Player is trying to move mark on board while still have marks in hand
+            
+            //reset turn
+            print("Reset turn")
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -93,8 +100,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerMarkTouched?.position = touchLocation
             }
         }
-        
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
