@@ -58,6 +58,19 @@ class NineMenMorrisRules {
         return turn
     }
     
+    func checkMarksInHand() -> Int{
+        
+        let whosTurnStr = whosTurn()
+        
+        if(whosTurnStr == "Blue"){
+            return bluemarker
+        }
+        else if(whosTurnStr == "Red"){
+            return redmarker
+        }
+        return -1
+    }
+    
     func setPlayerTurnTo(color: Int){
        turn = color
     }
