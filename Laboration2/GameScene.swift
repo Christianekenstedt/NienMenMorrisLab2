@@ -144,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
                 
-                if (game?.win(color: (game?.whosTurnAsInt())!))! {
+                if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
                     alertTurn(msg: "🎉🎈 \(game?.whosTurn()) wins! 🎈🎉")
                     print("Player \(game?.whosTurn()) wins!")
                 }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
@@ -165,6 +165,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }else{
                     print("INVALID MOVE!")
                     break // Fattar inte varför det inte går att ta setPlayerMark(resetPos!) ??????
+                }
+                
+                
+                if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
+                    alertTurn(msg: "🎉🎈 \(game?.whosTurn()) wins! 🎈🎉")
+                    restartGame(msg: ["Woho, grats! Do you want to play again?","Game Over!"])
                 }
                 
                 setPlayerMark(location: bp.position)
