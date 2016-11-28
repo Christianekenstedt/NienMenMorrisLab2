@@ -70,7 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if game?.whosTurnAsInt() == 2 {
                 for pm in teamBlue{
                     if pm.contains(touchLocation) {
-                        opponentMarkToRemove = pm
+                        playerMarkTouched = pm
                         opponentMarkPosToRemove = getPlayerMarkPositionOnBoard()
                     }
                 }
@@ -86,19 +86,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if playerMarkTouched != nil {
-            let touch = touches.first
-            let touchLocation = touch!.location(in: self)
-            playerMarkTouched?.position = touchLocation
+        if !hasMill{
+            if playerMarkTouched != nil {
+                let touch = touches.first
+                let touchLocation = touch!.location(in: self)
+                playerMarkTouched?.position = touchLocation
+            }
         }
+        
         
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if hasMill {
             
-            if (game?.remove(from: opponentMarkPosToRemove, color: (game?.whosTurnAsInt())!))!{
-               opponentMarkToRemove?.removeFromParent()
+            if (game?.remove(from: opponentMarkPosToRemove, color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))!{
+                print("Ta bort nod (\(playerMarkTouched!.name)) från vy.")
+               playerMarkTouched?.removeFromParent()
             }
             
             hasMill = false
@@ -141,9 +145,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
                     if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
                         print("VALID MOVE!")
-                        print("Move from e\(playerMarkFrom) to e\(pos!)")
+                        print("Move \(playerMarkTouched?.name) from e\(playerMarkFrom) to e\(pos!)")
                         if (game?.remove(to: pos!))! {
                             print("Du har mill, välj en av motståndarnas pjäs att ta bort!")
+                            
+                            if game?.whosTurnAsInt() == 1 {
+                                game?.setPlayerTurnTo(color: 2)
+                            }else{
+                                game?.setPlayerTurnTo(color: 1)
+                            }
                             hasMill = true
                         }
                     }

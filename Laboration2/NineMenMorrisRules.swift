@@ -58,6 +58,10 @@ class NineMenMorrisRules {
         return turn
     }
     
+    func setPlayerTurnTo(color: Int){
+       turn = color
+    }
+    
     /*
      * Returns true if a move is successful
      */
@@ -176,9 +180,12 @@ class NineMenMorrisRules {
      * Returns true if the marker where successfully removed
      */
     func remove(from: Int, color: Int) -> Bool{
+        print("Ta bort \(color) från \(from)")
         if gameplan[from] == color{
             gameplan[from] = EMPTY_SPACE
             // ta bort markören?
+            turn = turn == RED_MOVES ? BLUE_MOVES : RED_MOVES // LA TILL
+            print(whosTurn() + "'s turn!")
             return true
         }else{
             return false
