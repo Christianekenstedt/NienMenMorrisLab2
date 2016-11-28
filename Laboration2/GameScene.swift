@@ -28,7 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = UIColor.white
         physicsWorld.contactDelegate = self
         initBoardPositions()
-        
         startGame()
     }
     
@@ -43,9 +42,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-        
+        let touchCount = touches.count
         let touch = touches.first
         let touchLocation = touch!.location(in: self)
+        
+        if touchCount == 3{
+            restartGame(msg: ["Do you want to restart game?","Do you want to restart?"])
+        }
         
         if !hasMill {
             if game?.whosTurnAsInt() == 1 {
@@ -107,11 +110,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if (game?.remove(from: opponentMarkPosToRemove, color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))!{
                 print("Ta bort nod (\(playerMarkTouched!.name)) från vy.")
-               playerMarkTouched?.removeFromParent()
+                playerMarkTouched?.removeFromParent()
+                alertTurn(msg: "Good choice, hand over device to \(game!.whosTurn())")
+                hasMill = false
+                playerMarkTouched = nil
             }
             
-            hasMill = false
-            playerMarkTouched = nil
             return
         }
         checkWhereMarkIsPlaced(dropLocation: (touches.first?.location(in: self))!)
@@ -146,6 +150,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
                 
                 if (game?.win(color: (game?.whosTurnAsInt())!))! {
+                    alertTurn(msg: "🎉🎈 \(game?.whosTurn()) wins! 🎈🎉")
                     print("Player \(game?.whosTurn()) wins!")
                 }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
                     if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
@@ -168,6 +173,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 setPlayerMark(location: bp.position)
+                if(!hasMill){
+                    alertTurn(msg: "\(game!.whosTurn())'s turn!")
+                }else{
+                    alertTurn(msg: "\(game!.whosTurn()) has mill! Pick opponents marker to remove!")
+                }
                 return
             }
         }
@@ -210,15 +220,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startGame(){
         game = NineMenMorrisRules()
-        alertTurn()
+        alertTurn(msg: "Welcome to Nine Men's Morris game! Please hand over device to player 1.")
     }
     
-    func restartGame() {
-        game = NineMenMorrisRules()
+    func restartGame(msg: [String]) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: notificationRestartIdentifier), object: msg)
+
     }
     
-    func alertTurn(){
-        let msg = "\(game!.whosTurn())'s turn!"
+    func alertTurn(msg: String){
         NotificationCenter.default.post(name: Notification.Name(rawValue: notificationIdentifier), object: msg)
     }
     
