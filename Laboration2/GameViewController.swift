@@ -11,21 +11,39 @@ import SpriteKit
 import GameplayKit
 
 var notificationIdentifier = "alert"
+var notificationRestartIdentifier = "restart"
 
 class GameViewController: UIViewController {
     var msg : String? = nil
     
+    @IBOutlet weak var gameLabel: UILabel!
+    @IBOutlet weak var tipLabel: UILabel!
+    
+    @IBOutlet weak var newGameBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showWhosTurn), name: NSNotification.Name(rawValue: notificationIdentifier), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showResetOption), name: NSNotification.Name(rawValue: notificationRestartIdentifier), object: nil)
         
+        
+        
+        
+        
+            }
+    @IBAction func newGameBtnPressed(_ sender: Any) {
+        hideStartScene(bool: true)
+        showGamePlayScene()
+    }
+    
+    func hideStartScene(bool: Bool){
+        gameLabel.isHidden = bool
+        newGameBtn.isHidden = bool
+        tipLabel.isHidden = bool
+    }
+    
+    func showGamePlayScene(){
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            
-            //let scene = GameScene(size: view.bounds.size)
-            
-            //view.presentScene(scene)
             
             if let scene = SKScene(fileNamed: "GameScene") {
                 // Set the scale mode to scale to fit the window
@@ -39,13 +57,27 @@ class GameViewController: UIViewController {
             view.showsFPS = true
             view.showsNodeCount = true
         }
+
     }
     
     func showWhosTurn(notification: NSNotification){
-        let msg = notification.object as? String
-        let alert = UIAlertController(title: "Next player...", message: msg, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Hand over device and press me", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.global(qos: .background).async{
+            let msg = notification.object as? String
+            let alert = UIAlertController(title: "Game Alert!", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Press me when read and understand 🙃", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    func showResetOption(notification: NSNotification){
+        DispatchQueue.global(qos: .background).async{
+            let msg = notification.object as? [String]
+            let alert = UIAlertController(title: msg![1], message: msg![0], preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Restart game", style: UIAlertActionStyle.destructive, handler: {action in
+                self.showGamePlayScene()
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 
     override var shouldAutorotate: Bool {
