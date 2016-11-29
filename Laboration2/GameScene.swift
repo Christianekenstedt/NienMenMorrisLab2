@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene{
     
     private var label : SKLabelNode?
     private var teamBlue : [SKNode] = [SKNode]()
@@ -26,19 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         self.backgroundColor = UIColor.white
-        physicsWorld.contactDelegate = self
         initBoardPositions()
         startGame()
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
@@ -49,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if touchCount == 3{
             restartGame(msg: ["Do you want to restart game?","Do you want to restart?"])
         }
+        
         
         if !hasMill {
             if game?.whosTurnAsInt() == 1 {
@@ -86,11 +76,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        /*if !hasMill{
+            if playerMarkFrom > 0 && (game?.checkMarksInHand())! > 0 {
+                //Player is trying to move mark on board while still have marks in hand
+                playerMarkTouched = nil
+                playerMarkOrginalPosition = nil
+                playerMarkFrom = 0
+                opponentMarkPosToRemove = 0
+            }
+        }*/
         
-        if playerMarkFrom > 0 && (game?.checkMarksInHand())! > 0 {
-            //Player is trying to move mark on board while still have marks in hand
-            playerMarkTouched = nil
-        }
+        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -148,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
                 
                 if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
-                    alertTurn(msg: "🎉🎈 \(game?.whosTurn()) wins! 🎈🎉")
+                    alertTurn(msg: "🎉🎈 \(game?.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉")
                     print("Player \(game?.whosTurn()) wins!")
                 }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
                     if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
@@ -164,6 +160,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             }
                             hasMill = true
                         }
+                        game?.printBoard()
+                        if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
+                            restartGame(msg: ["🎉🎈 \(game?.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
+                        }
+
                     }
                 }else{
                     print("INVALID MOVE!")
@@ -171,10 +172,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 
-                if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
-                    alertTurn(msg: "🎉🎈 \(game?.whosTurn()) wins! 🎈🎉")
-                    restartGame(msg: ["Woho, grats! Do you want to play again?","Game Over!"])
-                }
                 
                 setPlayerMark(location: bp.position)
                 if(!hasMill){
@@ -187,29 +184,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         setPlayerMark(location: resetPos!)
 
-    }
-    
-    
-    func didBegin(_ contact: SKPhysicsContact) {
-        var fBody: SKPhysicsBody
-        var sBody: SKPhysicsBody
-        
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            fBody = contact.bodyA
-            sBody = contact.bodyB
-        } else {
-            fBody = contact.bodyB
-            sBody = contact.bodyA
-        }
-        
-        if fBody.categoryBitMask == playerMarkTouched?.physicsBody?.categoryBitMask && sBody.categoryBitMask == boardPositions[0].physicsBody?.categoryBitMask {
-            if (playerMarkTouched?.name?.contains("rc"))!{
-                print("\(playerMarkTouched!.name) nuddar \(sBody.node!.name)")
-            }else if (playerMarkTouched?.name?.contains("bc"))!{
-                print("\(playerMarkTouched!.name) nuddar \(sBody.node!.name)")
-            }
-            
-        }
     }
     
     func getPlayerMarkPositionOnBoard() -> Int{

@@ -20,6 +20,8 @@ class GameViewController: UIViewController {
     @IBOutlet weak var tipLabel: UILabel!
     
     @IBOutlet weak var newGameBtn: UIButton!
+    var scene : SKScene? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,12 +44,17 @@ class GameViewController: UIViewController {
         tipLabel.isHidden = bool
     }
     
+    
+    
     func showGamePlayScene(){
         if let view = self.view as! SKView? {
             
-            if let scene = SKScene(fileNamed: "GameScene") {
+            scene = SKScene(fileNamed: "GameScene")!
+            if scene != nil {
+                
                 // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
+                scene?.scaleMode = .aspectFit
+                
                 // Present the scene
                 view.presentScene(scene)
             }
@@ -59,6 +66,9 @@ class GameViewController: UIViewController {
         }
 
     }
+    
+    
+    
     
     func showWhosTurn(notification: NSNotification){
         DispatchQueue.global(qos: .background).async{
@@ -85,6 +95,7 @@ class GameViewController: UIViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
         } else {
@@ -100,4 +111,20 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+       print("rotating...")
+    }
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        if fromInterfaceOrientation.isPortrait {
+            
+        }
+    }
+    
+    func changeOriantaionScene(sceneName: String){
+        
+        
+    }
+    
+    
 }

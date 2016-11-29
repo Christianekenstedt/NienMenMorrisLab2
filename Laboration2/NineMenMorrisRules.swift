@@ -93,7 +93,7 @@ class NineMenMorrisRules {
                 if gameplan[to] == EMPTY_SPACE {
                     let valid = isValidMove(to: to,from: from)
                     if valid {
-                        gameplan[0] = RED_MARKER
+                        gameplan[to] = RED_MARKER
                         gameplan[from] = EMPTY_SPACE // ???????????????
                         turn = BLUE_MOVES
                         return true
@@ -292,5 +292,26 @@ class NineMenMorrisRules {
         default:
             return false
         }
+    }
+    /*
+     * 03           06           09
+     *     02       05       08
+     *         01   04   07
+     * 24  23  22        10  11  12
+     *         19   16   13
+     *     20       17       14
+     * 21           18           15
+     *
+     */
+    
+    func printBoard(){
+        print("\(gameplan[3])      \(gameplan[6])      \(gameplan[9])")
+        print("  \(gameplan[2])    \(gameplan[5])    \(gameplan[8]) ")
+        print("    \(gameplan[1])  \(gameplan[4])  \(gameplan[7])  ")
+        print("\(gameplan[24]) \(gameplan[23]) \(gameplan[22])     \(gameplan[10]) \(gameplan[11]) \(gameplan[12])")
+        print("    \(gameplan[19])  \(gameplan[16])  \(gameplan[13])  ")
+        print("  \(gameplan[20])    \(gameplan[17])    \(gameplan[14]) ")
+        print("\(gameplan[21])      \(gameplan[18])      \(gameplan[15])")
+        
     }
 }

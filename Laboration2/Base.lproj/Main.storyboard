@@ -23,20 +23,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nine Men's Morris Game" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H7I-9t-00N">
-                                <rect key="frame" x="25" y="314" width="324" height="38"/>
+                                <rect key="frame" x="25" y="315" width="325" height="37"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Peu-5y-25Q">
-                                <rect key="frame" x="150" y="360" width="75" height="30"/>
+                                <rect key="frame" x="151" y="360" width="75" height="30"/>
                                 <state key="normal" title="New Game"/>
                                 <connections>
                                     <action selector="newGameBtnPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="9Eu-bU-ZAX"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip: Press with three fingers to reset game!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fz6-Ec-eF0">
-                                <rect key="frame" x="23" y="398" width="329" height="93"/>
+                                <rect key="frame" x="23" y="398" width="330" height="93"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="93" id="0oa-cc-sdt"/>
                                 </constraints>
@@ -47,15 +47,14 @@
                         </subviews>
                         <color key="backgroundColor" red="0.87833553552627563" green="0.87848657369613647" blue="0.87832605838775635" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="55y-lU-AVc"/>
-                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerY" secondItem="3se-qz-xqx" secondAttribute="centerY" id="5qy-3t-qL4"/>
                             <constraint firstItem="Fz6-Ec-eF0" firstAttribute="centerX" secondItem="Peu-5y-25Q" secondAttribute="centerX" id="BNc-Y9-ZBO"/>
                             <constraint firstItem="Fz6-Ec-eF0" firstAttribute="top" secondItem="Peu-5y-25Q" secondAttribute="bottom" constant="8" symbolic="YES" id="EzI-gm-fNz"/>
-                            <constraint firstItem="H7I-9t-00N" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="9" id="O24-bn-z9c"/>
-                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerX" secondItem="Peu-5y-25Q" secondAttribute="centerX" id="OWc-M3-TZ2"/>
                             <constraint firstItem="Fz6-Ec-eF0" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="7" id="TDB-1c-CoN"/>
-                            <constraint firstItem="Peu-5y-25Q" firstAttribute="top" secondItem="H7I-9t-00N" secondAttribute="bottom" constant="8" symbolic="YES" id="d6J-rY-xUK"/>
-                            <constraint firstItem="H7I-9t-00N" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="294" id="gVa-K1-7hi"/>
+                            <constraint firstItem="H7I-9t-00N" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="9" id="U6o-0L-cPj"/>
+                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerY" secondItem="3se-qz-xqx" secondAttribute="centerY" id="UM1-YM-v0s"/>
+                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerX" secondItem="Fz6-Ec-eF0" secondAttribute="centerX" id="jwI-uo-BdQ"/>
+                            <constraint firstItem="Peu-5y-25Q" firstAttribute="top" secondItem="H7I-9t-00N" secondAttribute="bottom" constant="8" symbolic="YES" id="mn1-Uw-1gb"/>
+                            <constraint firstItem="H7I-9t-00N" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="vhk-P3-2WP"/>
                         </constraints>
                     </view>
                     <connections>

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA3588131DEDD71D00D642D7 /* GameSceneLandscapeB.sks in Resources */ = {isa = PBXBuildFile; fileRef = AA3588121DEDD71D00D642D7 /* GameSceneLandscapeB.sks */; };
 		AA442A8C1DE716CE00608D85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA442A8B1DE716CE00608D85 /* Assets.xcassets */; };
 		AA442A8E1DE71E0F00608D85 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = AA442A8D1DE71E0F00608D85 /* GameScene.sks */; };
 		AAF570EF1DE63F3600EB7D6A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF570EE1DE63F3600EB7D6A /* AppDelegate.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA3588121DEDD71D00D642D7 /* GameSceneLandscapeB.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneLandscapeB.sks; sourceTree = "<group>"; };
 		AA442A8B1DE716CE00608D85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA442A8D1DE71E0F00608D85 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		AAF570EB1DE63F3600EB7D6A /* Laboration2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Laboration2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				AA442A8D1DE71E0F00608D85 /* GameScene.sks */,
+				AA3588121DEDD71D00D642D7 /* GameSceneLandscapeB.sks */,
 				AA442A8B1DE716CE00608D85 /* Assets.xcassets */,
 				AAF570EE1DE63F3600EB7D6A /* AppDelegate.swift */,
 				AAF570F41DE63F3600EB7D6A /* GameScene.swift */,
@@ -244,6 +247,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA3588131DEDD71D00D642D7 /* GameSceneLandscapeB.sks in Resources */,
 				AAF570FA1DE63F3600EB7D6A /* Main.storyboard in Resources */,
 				AA442A8C1DE716CE00608D85 /* Assets.xcassets in Resources */,
 				AA442A8E1DE71E0F00608D85 /* GameScene.sks in Resources */,
