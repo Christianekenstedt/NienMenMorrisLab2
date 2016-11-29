@@ -108,7 +108,11 @@ class GameScene: SKScene{
                 alertTurn(msg: "Good choice, hand over device to \(game!.whosTurn())")
                 hasMill = false
                 playerMarkTouched = nil
+                if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
+                    restartGame(msg: ["🎉🎈 \(game!.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
+                }
             }
+            
             
             return
         }
@@ -144,7 +148,7 @@ class GameScene: SKScene{
                 let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
                 
                 if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
-                    alertTurn(msg: "🎉🎈 \(game?.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉")
+                    restartGame(msg: ["🎉🎈 \(game!.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
                     print("Player \(game?.whosTurn()) wins!")
                 }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
                     if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
@@ -161,9 +165,7 @@ class GameScene: SKScene{
                             hasMill = true
                         }
                         game?.printBoard()
-                        if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
-                            restartGame(msg: ["🎉🎈 \(game?.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
-                        }
+                        
 
                     }
                 }else{
