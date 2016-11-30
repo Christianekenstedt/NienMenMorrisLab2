@@ -12,14 +12,16 @@ import GameplayKit
 
 var notificationIdentifier = "alert"
 var notificationRestartIdentifier = "restart"
+var notificationGlowIdentifier = "glow"
 
 class GameViewController: UIViewController {
     var msg : String? = nil
     
     @IBOutlet weak var gameLabel: UILabel!
     @IBOutlet weak var tipLabel: UILabel!
-    
     @IBOutlet weak var newGameBtn: UIButton!
+    
+    
     var scene : SKScene? = nil
     
     override func viewDidLoad() {
@@ -27,7 +29,6 @@ class GameViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showWhosTurn), name: NSNotification.Name(rawValue: notificationIdentifier), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showResetOption), name: NSNotification.Name(rawValue: notificationRestartIdentifier), object: nil)
-        
         
         
         
@@ -71,23 +72,29 @@ class GameViewController: UIViewController {
     
     
     func showWhosTurn(notification: NSNotification){
-        DispatchQueue.global(qos: .background).async{
+        //DispatchQueue.global(qos: .background).async{
             let msg = notification.object as? String
             let alert = UIAlertController(title: "Game Alert!", message: msg, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Press me when read and understand 🙃", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        }
+        //}
     }
     func showResetOption(notification: NSNotification){
-        DispatchQueue.global(qos: .background).async{
+        //DispatchQueue.global(qos: .background).async{
             let msg = notification.object as? [String]
             let alert = UIAlertController(title: msg![1], message: msg![0], preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Restart game", style: UIAlertActionStyle.destructive, handler: {action in
                 self.showGamePlayScene()
             }))
-            alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Return to menu", style: UIAlertActionStyle.default, handler: {action in
+            if let view = self.view as! SKView?{
+                view.presentScene(nil)
+                self.hideStartScene(bool: false)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        }
+        //}
     }
 
     override var shouldAutorotate: Bool {

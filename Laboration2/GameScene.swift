@@ -14,6 +14,7 @@ class GameScene: SKScene{
     private var label : SKLabelNode?
     private var teamBlue : [SKNode] = [SKNode]()
     private var teamRed : [SKNode] = [SKNode]()
+    private var playerNames : [SKNode] = [SKNode]()
     private var boardPositions: [SKNode] = [SKNode]()
     private var playerMarkTouched : SKNode? = nil
     private var playerMarkOrginalPosition : CGPoint? = nil
@@ -129,9 +130,9 @@ class GameScene: SKScene{
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !hasMill{
-            playerMarkTouched = nil
-        }
+        
+            //playerMarkTouched = nil
+        
         
         
     }
@@ -155,10 +156,10 @@ class GameScene: SKScene{
         }
         let resetPos = playerMarkOrginalPosition
         
-        if let nodeToMove = playerMarkTouched {
-            playerMarkTouched = nil
+        
+        
             for bp in boardPositions{
-                if bp.intersects(nodeToMove)  { // intersects(playerMarkTouched!)
+                if bp.intersects(playerMarkTouched!)  { // intersects(playerMarkTouched!)
                     
                     let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
                     
@@ -168,7 +169,7 @@ class GameScene: SKScene{
                     }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
                         if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
                             print("VALID MOVE!")
-                            print("Move \(nodeToMove.name) from e\(playerMarkFrom) to e\(pos!)")
+                            print("Move \(playerMarkTouched!.name) from e\(playerMarkFrom) to e\(pos!)")
                             if (game?.remove(to: pos!))! {
                                 print("Du har mill, välj en av motståndarnas pjäs att ta bort!")
                                 
@@ -185,13 +186,11 @@ class GameScene: SKScene{
                         }
                     }else{
                         print("INVALID MOVE!")
-                        setPlayerMark(location: playerMarkOrginalPosition!)
-                        return
+                        break
                          // Fattar inte varför det inte går att ta setPlayerMark(resetPos!) ??????
                     }
                     
                     
-                    playerMarkTouched = nodeToMove
                     setPlayerMark(location: bp.position)
                     
                     if(!hasMill){
@@ -202,8 +201,9 @@ class GameScene: SKScene{
                     return
                 }
             }
-        }
-        setPlayerMark(location: resetPos!)
+            setPlayerMark(location: resetPos!)
+        
+        
 
     }
     
@@ -220,6 +220,7 @@ class GameScene: SKScene{
     func startGame(){
         game = NineMenMorrisRules()
         alertTurn(msg: "Welcome to Nine Men's Morris game! Please hand over device to player 1.")
+        
     }
     
     func restartGame(msg: [String]) {
@@ -228,7 +229,24 @@ class GameScene: SKScene{
     }
     
     func alertTurn(msg: String){
+        showPlayerTurn(color: game!.whosTurn())
         NotificationCenter.default.post(name: Notification.Name(rawValue: notificationIdentifier), object: msg)
+    }
+    
+    
+    func showPlayerTurn(color: String){
+        if color == "Red"{
+            (playerNames[1] as! SKLabelNode).fontName = "Helvetica Neue UltraLight"
+            (playerNames[1] as! SKLabelNode).fontColor = UIColor.black
+            (playerNames[0] as! SKLabelNode).fontName = "Helvetica Neue UltraLight-Bold"
+            (playerNames[0] as! SKLabelNode).fontColor = UIColor.red
+        }else if color == "Blue"{
+            (playerNames[0] as! SKLabelNode).fontName = "Helvetica Neue UltraLight"
+            (playerNames[0] as! SKLabelNode).fontColor = UIColor.black
+            (playerNames[1] as! SKLabelNode).fontName = "Helvetica Neue UltraLight-Bold"
+            (playerNames[1] as! SKLabelNode).fontColor = UIColor.blue
+        }
+        
     }
     
     func initBoardPositions(){
@@ -240,6 +258,8 @@ class GameScene: SKScene{
                     teamBlue.append(child)
                 }else if child.name!.contains("rc"){
                     teamRed.append(child)
+                }else if child.name!.contains("p"){
+                    playerNames.append(child)
                 }
                 
             }
