@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene{
+class GameSceneBackup: SKScene{
     
     private var label : SKLabelNode?
     private var teamBlue : [SKNode] = [SKNode]()
@@ -42,7 +42,7 @@ class GameScene: SKScene{
             }
             
             if let node = self.nodes(at: touchLocation).first {
-                    print("Touched \(node.name)")
+                print("Touched \(node.name)")
                 if !hasMill{
                     if game!.whosTurnAsInt() == 1 {
                         if node.name!.contains("bc") {
@@ -73,17 +73,58 @@ class GameScene: SKScene{
                     }
                 }
             }
-            if !hasMill{
-                if playerMarkFrom > 0 && (game?.checkMarksInHand())! > 0 {
-                    //Player is trying to move mark on board while still have marks in hand
-                    playerMarkTouched = nil
-                    playerMarkOrginalPosition = nil
-                    playerMarkFrom = 0
-                    opponentMarkPosToRemove = 0
-                }
-            }
+            
+            
+            
+            
+            
+            /*
+             if !hasMill {
+             if game?.whosTurnAsInt() == 1 {
+             for pm in teamBlue{
+             if pm.contains(touchLocation) {
+             playerMarkTouched = pm
+             playerMarkOrginalPosition = pm.position
+             playerMarkFrom = getPlayerMarkPositionOnBoard()
+             }
+             }
+             }else if game?.whosTurnAsInt() == 2 {
+             for pm in teamRed{
+             if pm.contains(touchLocation) {
+             playerMarkTouched = pm
+             playerMarkOrginalPosition = pm.position
+             playerMarkFrom = getPlayerMarkPositionOnBoard()
+             }
+             }
+             }
+             
+             }else{ // Måste fixa så man kan deleta!!!
+             if game?.whosTurnAsInt() == 2 {
+             for pm in teamBlue{
+             if pm.contains(touchLocation) {
+             playerMarkTouched = pm
+             opponentMarkPosToRemove = getPlayerMarkPositionOnBoard()
+             }
+             }
+             }else if game?.whosTurnAsInt() == 1 {
+             for pm in teamRed{
+             if pm.contains(touchLocation) {
+             playerMarkTouched = pm
+             opponentMarkPosToRemove = getPlayerMarkPositionOnBoard()
+             }
+             }
+             }
+             }*/
         }
-        /**/
+        /*if !hasMill{
+         if playerMarkFrom > 0 && (game?.checkMarksInHand())! > 0 {
+         //Player is trying to move mark on board while still have marks in hand
+         playerMarkTouched = nil
+         playerMarkOrginalPosition = nil
+         playerMarkFrom = 0
+         opponentMarkPosToRemove = 0
+         }
+         }*/
         
         
     }
@@ -138,7 +179,7 @@ class GameScene: SKScene{
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-            //playerMarkTouched = nil
+        //playerMarkTouched = nil
         
         
         
@@ -165,54 +206,54 @@ class GameScene: SKScene{
         
         
         
-            for bp in boardPositions{
-                if bp.intersects(playerMarkTouched!)  { // intersects(playerMarkTouched!)
-                    
-                    let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
-                    
-                    if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
-                        restartGame(msg: ["🎉🎈 \(game!.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
-                        print("Player \(game?.whosTurn()) wins!")
-                    }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
-                        if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
-                            print("VALID MOVE!")
-                            print("Move \(playerMarkTouched!.name) from e\(playerMarkFrom) to e\(pos!)")
-                            if (game?.remove(to: pos!))! {
-                                print("Du har mill, välj en av motståndarnas pjäs att ta bort!")
-                                
-                                if game?.whosTurnAsInt() == 1 {
-                                    game?.setPlayerTurnTo(color: 2)
-                                }else{
-                                    game?.setPlayerTurnTo(color: 1)
-                                }
-                                showMill(who: (game?.whosTurn())!)
-                                hasMill = true
+        for bp in boardPositions{
+            if bp.intersects(playerMarkTouched!)  { // intersects(playerMarkTouched!)
+                
+                let pos = Int(bp.name!.substring(from: bp.name!.index(bp.name!.startIndex, offsetBy: 1)))
+                
+                if (game?.win(color: (game?.whosTurnAsInt())! == 1 ? 5 : 4 ))! {
+                    restartGame(msg: ["🎉🎈 \(game!.whosTurn() == "Red" ? "Blue" : "Red") wins! 🎈🎉! Do you want to play again?","Game Over!"])
+                    print("Player \(game?.whosTurn()) wins!")
+                }else if (game?.isValidMove(to: pos!, from: playerMarkFrom))!{
+                    if(game?.legalMove(to: pos!, from: playerMarkFrom, color: (game?.whosTurnAsInt())!))!{
+                        print("VALID MOVE!")
+                        print("Move \(playerMarkTouched!.name) from e\(playerMarkFrom) to e\(pos!)")
+                        if (game?.remove(to: pos!))! {
+                            print("Du har mill, välj en av motståndarnas pjäs att ta bort!")
+                            
+                            if game?.whosTurnAsInt() == 1 {
+                                game?.setPlayerTurnTo(color: 2)
+                            }else{
+                                game?.setPlayerTurnTo(color: 1)
                             }
-                            game?.printBoard()
-                            
-                            
+                            showMill(who: (game?.whosTurn())!)
+                            hasMill = true
                         }
-                    }else{
-                        print("INVALID MOVE!")
-                        break
-                         // Fattar inte varför det inte går att ta setPlayerMark(resetPos!) ??????
+                        game?.printBoard()
+                        
+                        
                     }
-                    
-                    
-                    setPlayerMark(location: bp.position)
-                    
-                    if(!hasMill){
-                        showPlayerTurn(color: game!.whosTurn())
-                    }else{
-                        alertTurn(msg: "\(game!.whosTurn()) has mill! Pick opponents marker to remove!")
-                    }
-                    return
+                }else{
+                    print("INVALID MOVE!")
+                    break
+                    // Fattar inte varför det inte går att ta setPlayerMark(resetPos!) ??????
                 }
+                
+                
+                setPlayerMark(location: bp.position)
+                
+                if(!hasMill){
+                    showPlayerTurn(color: game!.whosTurn())
+                }else{
+                    alertTurn(msg: "\(game!.whosTurn()) has mill! Pick opponents marker to remove!")
+                }
+                return
             }
-            setPlayerMark(location: resetPos!)
+        }
+        setPlayerMark(location: resetPos!)
         
         
-
+        
     }
     
     func getPlayerMarkPositionOnBoard() -> Int{
@@ -233,7 +274,7 @@ class GameScene: SKScene{
     
     func restartGame(msg: [String]) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: notificationRestartIdentifier), object: msg)
-
+        
     }
     
     func alertTurn(msg: String){

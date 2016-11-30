@@ -211,7 +211,7 @@ class NineMenMorrisRules {
     func win(color: Int) -> Bool{
         var countMarker = 0
         var count = 0
-        while count < 23 {
+        while count < 25 {
             if gameplan[count] != EMPTY_SPACE && gameplan[count] != color {
                 countMarker = countMarker + 1
             }
