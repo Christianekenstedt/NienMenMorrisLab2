@@ -195,6 +195,7 @@ class GameScene: SKScene{
                     
                     if(!hasMill){
                         //alertTurn(msg: "\(game!.whosTurn())'s turn!")
+                        showPlayerTurn(color: game!.whosTurn())
                     }else{
                         alertTurn(msg: "\(game!.whosTurn()) has mill! Pick opponents marker to remove!")
                     }
