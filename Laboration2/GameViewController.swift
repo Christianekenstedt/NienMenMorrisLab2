@@ -31,8 +31,6 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.showResetOption), name: NSNotification.Name(rawValue: notificationRestartIdentifier), object: nil)
         
         
-        
-        
             }
     @IBAction func newGameBtnPressed(_ sender: Any) {
         hideStartScene(bool: true)
@@ -44,8 +42,6 @@ class GameViewController: UIViewController {
         newGameBtn.isHidden = bool
         tipLabel.isHidden = bool
     }
-    
-    
     
     func showGamePlayScene(){
         if let view = self.view as! SKView? {
@@ -119,19 +115,6 @@ class GameViewController: UIViewController {
         return true
     }
     
-    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-       print("rotating...")
-    }
-    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        if fromInterfaceOrientation.isPortrait {
-            
-        }
-    }
-    
-    func changeOriantaionScene(sceneName: String){
-        
-        
-    }
     
     
 }

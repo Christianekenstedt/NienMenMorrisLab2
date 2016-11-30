@@ -137,11 +137,6 @@ class GameScene: SKScene{
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-            //playerMarkTouched = nil
-        
-        
-        
     }
     
     
@@ -251,7 +246,10 @@ class GameScene: SKScene{
         label.fontSize = 40
         var fadeOut = SKAction.fadeOut(withDuration: 6)
         self.addChild(label)
-        label.run(fadeOut)
+        label.run(fadeOut, completion: {action in
+            label.removeFromParent()
+        })
+        
         
     }
     
@@ -287,5 +285,4 @@ class GameScene: SKScene{
             }
         }
     }
-    
 }
