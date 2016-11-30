@@ -194,7 +194,7 @@ class GameScene: SKScene{
                     setPlayerMark(location: bp.position)
                     
                     if(!hasMill){
-                        alertTurn(msg: "\(game!.whosTurn())'s turn!")
+                        //alertTurn(msg: "\(game!.whosTurn())'s turn!")
                     }else{
                         alertTurn(msg: "\(game!.whosTurn()) has mill! Pick opponents marker to remove!")
                     }
