@@ -89,8 +89,7 @@ class NineMenMorrisRules {
                         turn = BLUE_MOVES
                         return true
                     }
-                }
-                if gameplan[to] == EMPTY_SPACE {
+                }else if gameplan[to] == EMPTY_SPACE { // added else if instead of else
                     let valid = isValidMove(to: to,from: from)
                     if valid {
                         gameplan[to] = RED_MARKER
@@ -130,6 +129,7 @@ class NineMenMorrisRules {
         }else{
             return false
         }
+        return false // added when added else if
     }
     
     /**
@@ -137,7 +137,7 @@ class NineMenMorrisRules {
      */
     func remove(to: Int) -> Bool{
         if ((to == 1 || to == 4 || to == 7) && gameplan[1] == gameplan[4]
-            && gameplan[4] == gameplan[7] && gameplan[1] != 0) {
+            && gameplan[4] == gameplan[7] ) {
             return true
         } else if ((to == 2 || to == 5 || to == 8)
             && gameplan[2] == gameplan[5] && gameplan[5] == gameplan[8]) {
